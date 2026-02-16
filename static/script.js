@@ -58,6 +58,8 @@ function initGame() {
     // UI Updates
     gameOverScreen.classList.add('hidden');
     startScreen.classList.remove('hidden');
+    nameModal.classList.add('hidden'); // Asegurar que el modal se cierre
+    playerNameInput.value = ""; // Limpiar el input
 
     render();
 }
