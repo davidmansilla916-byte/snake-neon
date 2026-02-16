@@ -300,7 +300,7 @@ function setDirection(key) {
 // Input Handling
 document.addEventListener('keydown', (e) => {
     // Si el modal de nombre está abierto, no hacer nada (para poder escribir)
-    if (!nameModal.classList.contains('hidden')) return;
+    if (nameModal && !nameModal.classList.contains('hidden')) return;
 
     const key = e.key;
 
@@ -331,7 +331,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-restartBtn.addEventListener('click', initGame);
+if (restartBtn) restartBtn.addEventListener('click', initGame);
 
 // Initial Render
 initGame();
