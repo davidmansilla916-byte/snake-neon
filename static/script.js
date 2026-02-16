@@ -14,12 +14,14 @@ const nameModal = document.getElementById('name-modal');
 const playerNameInput = document.getElementById('player-name-input');
 const submitScoreBtn = document.getElementById('submit-score-btn');
 const cancelScoreBtn = document.getElementById('cancel-score-btn');
+const startGameBtn = document.getElementById('start-game-btn');
 
 // Verificar que los elementos existan antes de usarlos
-const elementsExist = restartBtn && startScreen && gameOverScreen;
+const elementsExist = startScreen && gameOverScreen;
 if (!elementsExist) {
     console.error("Faltan elementos críticos del DOM. Asegúrate de que el HTML esté actualizado.");
 }
+
 
 // Game settings
 const gridSize = 20;
@@ -362,8 +364,20 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-if (restartBtn) restartBtn.addEventListener('click', initGame);
+if (restartBtn) restartBtn.addEventListener('click', () => {
+    initGame();
+    startGame();
+});
 
-// Initial Render
-initGame();
-updateLeaderboard();
+if (startGameBtn) {
+    startGameBtn.addEventListener('click', () => {
+        // Esta es una interacción de usuario FUERTE, ideal para el audio
+        if (bgMusic) {
+            bgMusic.muted = false;
+            bgMusic.play().then(() => console.log("Audio iniciado por botón")).catch(e => console.error("Error audio:", e));
+        }
+        initGame();
+        startGame();
+    });
+}
+
