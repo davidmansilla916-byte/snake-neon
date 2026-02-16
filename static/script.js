@@ -14,6 +14,12 @@ const nameModal = document.getElementById('name-modal');
 const playerNameInput = document.getElementById('player-name-input');
 const submitScoreBtn = document.getElementById('submit-score-btn');
 
+// Verificar que los elementos existan antes de usarlos
+const elementsExist = restartBtn && startScreen && gameOverScreen;
+if (!elementsExist) {
+    console.error("Faltan elementos críticos del DOM. Asegúrate de que el HTML esté actualizado.");
+}
+
 // Game settings
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
@@ -56,10 +62,10 @@ function initGame() {
     if (gameInterval) clearInterval(gameInterval);
 
     // UI Updates
-    gameOverScreen.classList.add('hidden');
-    startScreen.classList.remove('hidden');
-    nameModal.classList.add('hidden'); // Asegurar que el modal se cierre
-    playerNameInput.value = ""; // Limpiar el input
+    if (gameOverScreen) gameOverScreen.classList.add('hidden');
+    if (startScreen) startScreen.classList.remove('hidden');
+    if (nameModal) nameModal.classList.add('hidden');
+    if (playerNameInput) playerNameInput.value = "";
 
     render();
 }
@@ -67,11 +73,11 @@ function initGame() {
 function startGame() {
     if (isGameRunning) return;
     isGameRunning = true;
-    startScreen.classList.add('hidden');
+    if (startScreen) startScreen.classList.add('hidden');
     velocity = { x: 1, y: 0 }; // Start moving right
 
     // Play music on start
-    if (!isMuted) {
+    if (!isMuted && bgMusic) {
         bgMusic.play().catch(e => console.log("Audio play failed:", e));
     }
 
@@ -79,22 +85,24 @@ function startGame() {
 }
 
 // Mute Functionality
-muteBtn.addEventListener('click', () => {
-    isMuted = !isMuted;
-    bgMusic.muted = isMuted;
+if (muteBtn) {
+    muteBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        if (bgMusic) bgMusic.muted = isMuted;
 
-    if (isMuted) {
-        muteIcon.textContent = '🔇';
-        muteBtn.classList.add('muted');
-        bgMusic.pause();
-    } else {
-        muteIcon.textContent = '🔊';
-        muteBtn.classList.remove('muted');
-        if (isGameRunning) {
-            bgMusic.play().catch(e => console.log("Audio play failed:", e));
+        if (isMuted) {
+            if (muteIcon) muteIcon.textContent = '🔇';
+            muteBtn.classList.add('muted');
+            if (bgMusic) bgMusic.pause();
+        } else {
+            if (muteIcon) muteIcon.textContent = '🔊';
+            muteBtn.classList.remove('muted');
+            if (isGameRunning && bgMusic) {
+                bgMusic.play().catch(e => console.log("Audio play failed:", e));
+            }
         }
-    }
-});
+    });
+}
 
 function gameLoop() {
     if (isGameOver) return;
@@ -165,19 +173,20 @@ function gameOver() {
     }
 
     finalScoreElement.textContent = score;
-    gameOverScreen.classList.remove('hidden');
+    if (gameOverScreen) gameOverScreen.classList.remove('hidden');
 
     // Show name modal if score > 0
-    if (score > 0) {
+    if (score > 0 && nameModal) {
         setTimeout(() => {
             nameModal.classList.remove('hidden');
-            playerNameInput.focus();
+            if (playerNameInput) playerNameInput.focus();
         }, 1000); // Wait a bit before showing modal
     }
 }
 
 // Leaderboard API functions
 async function updateLeaderboard() {
+    if (!leaderboardList) return;
     try {
         const response = await fetch('/api/scores');
         const scores = await response.json();
@@ -195,6 +204,7 @@ async function updateLeaderboard() {
 }
 
 async function submitScore() {
+    if (!playerNameInput || !submitScoreBtn) return;
     const name = playerNameInput.value.trim() || "Anónimo";
     submitScoreBtn.disabled = true;
     submitScoreBtn.textContent = "GUARDANDO...";
@@ -207,7 +217,7 @@ async function submitScore() {
         });
 
         if (response.ok) {
-            nameModal.classList.add('hidden');
+            if (nameModal) nameModal.classList.add('hidden');
             await updateLeaderboard();
         }
     } catch (e) {
@@ -219,10 +229,14 @@ async function submitScore() {
     }
 }
 
-submitScoreBtn.addEventListener('click', submitScore);
-playerNameInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') submitScore();
-});
+if (submitScoreBtn) {
+    submitScoreBtn.addEventListener('click', submitScore);
+}
+if (playerNameInput) {
+    playerNameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') submitScore();
+    });
+}
 
 function render() {
     // Clear canvas
