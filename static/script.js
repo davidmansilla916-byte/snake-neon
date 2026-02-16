@@ -257,19 +257,50 @@ function drawRect(x, y, color, glow) {
 }
 
 // Input Handling
+// Función auxiliar para cambiar la dirección de forma segura
+function setDirection(key) {
+    switch (key) {
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
+            if (velocity.y !== 1) velocity = { x: 0, y: -1 };
+            break;
+        case 'ArrowDown':
+        case 's':
+        case 'S':
+            if (velocity.y !== -1) velocity = { x: 0, y: 1 };
+            break;
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+            if (velocity.x !== 1) velocity = { x: -1, y: 0 };
+            break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+            if (velocity.x !== -1) velocity = { x: 1, y: 0 };
+            break;
+    }
+}
+
+// Input Handling
 document.addEventListener('keydown', (e) => {
-    // Si el modal de nombre está abierto, no procesar estas teclas para el juego
+    // Si el modal de nombre está abierto, no hacer nada (para poder escribir)
     if (!nameModal.classList.contains('hidden')) return;
 
-    // Reiniciar o Empezar juego
-    if (!isGameRunning && !['F5', 'F12'].includes(e.key)) {
-        // Si estamos en Game Over, cualquier tecla reinicia (si el modal está cerrado)
+    const key = e.key;
+
+    // Si el juego no está corriendo, cualquier tecla válida lo inicia
+    if (!isGameRunning && !['F5', 'F12', 'Control', 'Alt', 'Shift'].includes(key)) {
         if (isGameOver) {
             initGame();
         }
 
-        // Prevenir scroll
-        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
+        // Registrar dirección inicial si es una tecla de movimiento
+        setDirection(key);
+
+        // Prevenir scroll si es una tecla de control
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(key)) {
             e.preventDefault();
         }
 
@@ -277,37 +308,12 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
-    // Prevenir scroll durante el juego
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
-        e.preventDefault();
-    }
-
-    // Direction handling
-    switch (e.key) {
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-            if (velocity.y === 1) break;
-            velocity = { x: 0, y: -1 };
-            break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-            if (velocity.y === -1) break;
-            velocity = { x: 0, y: 1 };
-            break;
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-            if (velocity.x === 1) break;
-            velocity = { x: -1, y: 0 };
-            break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-            if (velocity.x === -1) break;
-            velocity = { x: 1, y: 0 };
-            break;
+    // Durante el juego, cambiar dirección
+    if (isGameRunning) {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(key)) {
+            e.preventDefault();
+            setDirection(key);
+        }
     }
 });
 
