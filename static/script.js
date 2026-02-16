@@ -53,31 +53,25 @@ let highScore = localStorage.getItem('snakeHighScore') || 0;
 
 highScoreElement.textContent = highScore;
 
-// Initial Render
-initGame();
-updateLeaderboard();
-function initGame() {
-    // Cancelar cualquier aparición pendiente del modal
-    if (nameModalTimeout) clearTimeout(nameModalTimeout);
+// Game State
+let snake = [];
+food = generateFood();
+velocity = { x: 0, y: 0 };
+score = 0;
+scoreElement.textContent = score;
+isGameOver = false;
+isGameRunning = false;
 
-    snake = [{ x: 10, y: 10 }];
-    food = generateFood();
-    velocity = { x: 0, y: 0 };
-    score = 0;
-    scoreElement.textContent = score;
-    isGameOver = false;
-    isGameRunning = false;
+// Clear previous interval if exists
+if (gameInterval) clearInterval(gameInterval);
 
-    // Clear previous interval if exists
-    if (gameInterval) clearInterval(gameInterval);
+// UI Updates
+if (gameOverScreen) gameOverScreen.classList.add('hidden');
+if (startScreen) startScreen.classList.remove('hidden');
+if (nameModal) nameModal.classList.add('hidden');
+if (playerNameInput) playerNameInput.value = "";
 
-    // UI Updates
-    if (gameOverScreen) gameOverScreen.classList.add('hidden');
-    if (startScreen) startScreen.classList.remove('hidden');
-    if (nameModal) nameModal.classList.add('hidden');
-    if (playerNameInput) playerNameInput.value = "";
-
-    render();
+render();
 }
 
 function startGame() {
