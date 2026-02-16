@@ -12,52 +12,75 @@
 </head>
 
 <body>
-    <div class="game-container">
-        <header>
-            <h1 class="neon-text">NEON SNAKE</h1>
-            <div class="header-controls">
-                <div class="score-board">
-                    <div class="score-item">Puntaje: <span id="score">0</span></div>
-                    <div class="score-item">Mejor: <span id="high-score">0</span></div>
+    <main class="main-layout">
+        <div class="game-container">
+            <header>
+                <h1 class="neon-text">NEON SNAKE</h1>
+                <div class="header-controls">
+                    <div class="score-board">
+                        <div class="score-item">Puntaje: <span id="score">0</span></div>
+                        <div class="score-item">Mejor: <span id="high-score">0</span></div>
+                    </div>
+                    <button id="mute-btn" class="icon-button" title="Silenciar Música">
+                        <span id="mute-icon">🔊</span>
+                    </button>
                 </div>
-                <button id="mute-btn" class="icon-button" title="Silenciar Música">
-                    <span id="mute-icon">🔊</span>
-                </button>
-            </div>
-        </header>
+            </header>
 
-        <audio id="bg-music" loop>
-            <source
-                src="https://www.orangefreesounds.com/wp-content/uploads/2020/09/Enchanted-synthwave-magic-uplifting-synth-loop.mp3"
-                type="audio/mpeg">
-        </audio>
+            <audio id="bg-music" loop>
+                <source
+                    src="https://www.orangefreesounds.com/wp-content/uploads/2020/09/Enchanted-synthwave-magic-uplifting-synth-loop.mp3"
+                    type="audio/mpeg">
+            </audio>
 
-        <div class="canvas-wrapper">
-            <canvas id="gameCanvas" width="400" height="400"></canvas>
-            <div id="start-screen" class="overlay">
-                <h2>PRESIONA CUALQUIER TECLA</h2>
-                <p class="blink">PARA COMENZAR</p>
-            </div>
-            <div id="game-over-screen" class="overlay hidden">
-                <h2 class="game-over-text">GAME OVER</h2>
-                <div class="final-score-box">
-                    <p>Puntaje Final</p>
-                    <span id="final-score">0</span>
+            <div class="canvas-wrapper">
+                <canvas id="gameCanvas" width="400" height="400"></canvas>
+                <div id="start-screen" class="overlay">
+                    <h2>PRESIONA CUALQUIER TECLA</h2>
+                    <p class="blink">PARA COMENZAR</p>
                 </div>
-                <button id="restart-btn" class="neon-button">JUGAR DE NUEVO</button>
+                <div id="game-over-screen" class="overlay hidden">
+                    <h2 class="game-over-text">GAME OVER</h2>
+                    <div class="final-score-box">
+                        <p>Puntaje Final</p>
+                        <span id="final-score">0</span>
+                    </div>
+                    <button id="restart-btn" class="neon-button">JUGAR DE NUEVO</button>
+                </div>
+
+                <!-- Modal para nombre -->
+                <div id="name-modal" class="overlay hidden">
+                    <div class="modal-content">
+                        <h2 class="neon-text-small">¡NUEVO RÉCORD!</h2>
+                        <p>Introduce tu nombre:</p>
+                        <input type="text" id="player-name-input" maxlength="20" placeholder="Tu nombre..."
+                            autocomplete="off">
+                        <button id="submit-score-btn" class="neon-button">GUARDAR</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-hint">
+                <div class="key">▲</div>
+                <div class="key-row">
+                    <div class="key">◄</div>
+                    <div class="key">▼</div>
+                    <div class="key">►</div>
+                </div>
+                <p>Usa las flechas o WASD</p>
             </div>
         </div>
 
-        <div class="controls-hint">
-            <div class="key">▲</div>
-            <div class="key-row">
-                <div class="key">◄</div>
-                <div class="key">▼</div>
-                <div class="key">►</div>
+        <!-- Leaderboard Sidebar -->
+        <aside class="leaderboard-container">
+            <h2 class="neon-text-side">TOP RECORDS</h2>
+            <div class="leaderboard-box">
+                <ul id="leaderboard-list">
+                    <li>Cargando...</li>
+                </ul>
             </div>
-            <p>Usa las flechas para moverte</p>
-        </div>
-    </div>
+        </aside>
+    </main>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
