@@ -63,6 +63,13 @@ h1.neon-text {
     animation: flicker 2s infinite alternate;
 }
 
+.header-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
 .score-board {
     display: flex;
     justify-content: center;
@@ -75,6 +82,42 @@ h1.neon-text {
     border: 1px solid rgba(0, 255, 204, 0.3);
     box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
     backdrop-filter: blur(5px);
+}
+
+.icon-button {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.icon-button:hover {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px var(--primary-color);
+    transform: scale(1.1);
+}
+
+.icon-button.muted {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+}
+
+.icon-button.muted:hover {
+    background: var(--secondary-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px var(--secondary-color);
 }
 
 .score-item span {
@@ -216,6 +259,98 @@ canvas {
     font-size: 1.2rem;
 }
 
+/* Layout */
+.main-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.game-container {
+    text-align: center;
+    flex: 1;
+}
+
+/* Leaderboard */
+.leaderboard-container {
+    width: 250px;
+    background: rgba(10, 10, 20, 0.8);
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+    backdrop-filter: blur(10px);
+    margin-top: 85px;
+}
+
+.neon-text-side {
+    font-family: var(--font-heading);
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px var(--secondary-color);
+}
+
+.leaderboard-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.leaderboard-box li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 0, 255, 0.1);
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+}
+
+.leaderboard-box li:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-box li .name {
+    color: var(--text-color);
+}
+
+.leaderboard-box li .points {
+    color: var(--accent-color);
+}
+
+/* Modal */
+.modal-content {
+    background: var(--bg-color);
+    border: 3px solid var(--primary-color);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(0, 255, 204, 0.3);
+}
+
+.neon-text-small {
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--primary-color);
+    margin-bottom: 20px;
+}
+
+#player-name-input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--primary-color);
+    color: white;
+    padding: 10px;
+    font-family: var(--font-body);
+    width: 100%;
+    margin-bottom: 20px;
+    outline: none;
+    text-align: center;
+}
+
 /* Animations */
 @keyframes blinker {
     50% {
@@ -248,6 +383,20 @@ canvas {
 }
 
 /* Responsive adjustments */
+@media (max-width: 900px) {
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+        overflow-y: auto;
+    }
+
+    .leaderboard-container {
+        width: 100%;
+        max-width: 400px;
+        margin-top: 20px;
+    }
+}
+
 @media (max-width: 500px) {
     canvas {
         width: 320px;

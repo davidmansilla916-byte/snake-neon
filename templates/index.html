@@ -15,11 +15,22 @@
     <div class="game-container">
         <header>
             <h1 class="neon-text">NEON SNAKE</h1>
-            <div class="score-board">
-                <div class="score-item">Puntaje: <span id="score">0</span></div>
-                <div class="score-item">Mejor: <span id="high-score">0</span></div>
+            <div class="header-controls">
+                <div class="score-board">
+                    <div class="score-item">Puntaje: <span id="score">0</span></div>
+                    <div class="score-item">Mejor: <span id="high-score">0</span></div>
+                </div>
+                <button id="mute-btn" class="icon-button" title="Silenciar Música">
+                    <span id="mute-icon">🔊</span>
+                </button>
             </div>
         </header>
+
+        <audio id="bg-music" loop>
+            <source
+                src="https://www.orangefreesounds.com/wp-content/uploads/2020/09/Enchanted-synthwave-magic-uplifting-synth-loop.mp3"
+                type="audio/mpeg">
+        </audio>
 
         <div class="canvas-wrapper">
             <canvas id="gameCanvas" width="400" height="400"></canvas>

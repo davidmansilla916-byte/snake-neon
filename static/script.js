@@ -6,6 +6,13 @@ const finalScoreElement = document.getElementById('final-score');
 const startScreen = document.getElementById('start-screen');
 const gameOverScreen = document.getElementById('game-over-screen');
 const restartBtn = document.getElementById('restart-btn');
+const bgMusic = document.getElementById('bg-music');
+const muteBtn = document.getElementById('mute-btn');
+const muteIcon = document.getElementById('mute-icon');
+const leaderboardList = document.getElementById('leaderboard-list');
+const nameModal = document.getElementById('name-modal');
+const playerNameInput = document.getElementById('player-name-input');
+const submitScoreBtn = document.getElementById('submit-score-btn');
 
 // Game settings
 const gridSize = 20;
@@ -14,6 +21,7 @@ let speed = 100; // ms
 let gameInterval;
 let isGameRunning = false;
 let isGameOver = false;
+let isMuted = false;
 
 // Theme Colors (Match CSS)
 const THEME = {
@@ -59,8 +67,32 @@ function startGame() {
     isGameRunning = true;
     startScreen.classList.add('hidden');
     velocity = { x: 1, y: 0 }; // Start moving right
+
+    // Play music on start
+    if (!isMuted) {
+        bgMusic.play().catch(e => console.log("Audio play failed:", e));
+    }
+
     gameInterval = setInterval(gameLoop, speed);
 }
+
+// Mute Functionality
+muteBtn.addEventListener('click', () => {
+    isMuted = !isMuted;
+    bgMusic.muted = isMuted;
+
+    if (isMuted) {
+        muteIcon.textContent = '🔇';
+        muteBtn.classList.add('muted');
+        bgMusic.pause();
+    } else {
+        muteIcon.textContent = '🔊';
+        muteBtn.classList.remove('muted');
+        if (isGameRunning) {
+            bgMusic.play().catch(e => console.log("Audio play failed:", e));
+        }
+    }
+});
 
 function gameLoop() {
     if (isGameOver) return;
@@ -132,7 +164,63 @@ function gameOver() {
 
     finalScoreElement.textContent = score;
     gameOverScreen.classList.remove('hidden');
+
+    // Show name modal if score > 0
+    if (score > 0) {
+        setTimeout(() => {
+            nameModal.classList.remove('hidden');
+            playerNameInput.focus();
+        }, 1000); // Wait a bit before showing modal
+    }
 }
+
+// Leaderboard API functions
+async function updateLeaderboard() {
+    try {
+        const response = await fetch('/api/scores');
+        const scores = await response.json();
+
+        leaderboardList.innerHTML = scores.map((s, index) => `
+            <li>
+                <span class="name">${index + 1}. ${s.name}</span>
+                <span class="points">${s.score}</span>
+            </li>
+        `).join('') || '<li>Sin récords aún</li>';
+    } catch (e) {
+        console.error("Error al cargar leaderboard:", e);
+        leaderboardList.innerHTML = '<li>Error al cargar</li>';
+    }
+}
+
+async function submitScore() {
+    const name = playerNameInput.value.trim() || "Anónimo";
+    submitScoreBtn.disabled = true;
+    submitScoreBtn.textContent = "GUARDANDO...";
+
+    try {
+        const response = await fetch('/api/scores', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, score })
+        });
+
+        if (response.ok) {
+            nameModal.classList.add('hidden');
+            await updateLeaderboard();
+        }
+    } catch (e) {
+        console.error("Error al enviar puntaje:", e);
+    } finally {
+        submitScoreBtn.disabled = false;
+        submitScoreBtn.textContent = "GUARDAR";
+        playerNameInput.value = "";
+    }
+}
+
+submitScoreBtn.addEventListener('click', submitScore);
+playerNameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') submitScore();
+});
 
 function render() {
     // Clear canvas
@@ -211,3 +299,4 @@ restartBtn.addEventListener('click', initGame);
 
 // Initial Render
 initGame();
+updateLeaderboard();
