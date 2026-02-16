@@ -114,13 +114,13 @@ if (muteBtn) {
 // Intentar "desbloquear" el audio en la primera interacción del usuario
 function unlockAudio() {
     if (bgMusic && bgMusic.paused && !isMuted) {
+        bgMusic.volume = 0.5; // Asegurar volumen audible
         bgMusic.play().then(() => {
-            // Si tiene éxito, removemos los escuchadores para no repetir
+            console.log("Música iniciada con éxito");
             document.removeEventListener('click', unlockAudio);
             document.removeEventListener('keydown', unlockAudio);
-            console.log("Música desbloqueada correctamente");
         }).catch(e => {
-            console.log("Esperando interacción real para audio...");
+            console.error("Error al reproducir audio:", e.message);
         });
     }
 }

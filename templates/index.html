@@ -27,10 +27,13 @@
                 </div>
             </header>
 
-            <audio id="bg-music" loop>
-                <source src="https://raw.githubusercontent.com/davidmansilla916-byte/snake-neon/main/static/music.mp3"
+            <audio id="bg-music" loop preload="auto">
+                <!-- Fuente 1: Pixabay CDN -->
+                <source src="https://cdn.pixabay.com/audio/2022/10/25/audio_7314789504.mp3" type="audio/mpeg">
+                <!-- Fuente 2: Wayback Machine / Archive (Muy estable) -->
+                <source
+                    src="https://archive.org/download/synthwave-collection/10%20-%20Perturbator%20-%20Future%20Club.mp3"
                     type="audio/mpeg">
-                <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_c35ef19335.mp3" type="audio/mpeg">
             </audio>
 
             <div class="canvas-wrapper">
