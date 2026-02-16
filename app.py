@@ -5,8 +5,14 @@ import os
 
 app = Flask(__name__)
 
-# Configuración de la base de datos (SQLite local)
-db_path = os.path.join(os.path.dirname(__file__), 'scores.db')
+# Configuración de la base de datos
+if os.environ.get('VERCEL'):
+    # En Vercel, solo el directorio /tmp es escribible
+    db_path = '/tmp/scores.db'
+else:
+    # Localmente usamos la carpeta del proyecto
+    db_path = os.path.join(os.path.dirname(__file__), 'scores.db')
+
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
