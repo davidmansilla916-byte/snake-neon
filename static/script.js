@@ -86,7 +86,8 @@ function startGame() {
 
 // Mute Functionality
 if (muteBtn) {
-    muteBtn.addEventListener('click', () => {
+    muteBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Evitar que el clic en el botón inicie el juego
         isMuted = !isMuted;
         if (bgMusic) bgMusic.muted = isMuted;
 
@@ -103,6 +104,13 @@ if (muteBtn) {
         }
     });
 }
+
+// Intentar "desbloquear" el audio en el primer clic del usuario en la página
+document.addEventListener('click', () => {
+    if (!isMuted && bgMusic && bgMusic.paused && isGameRunning) {
+        bgMusic.play().catch(() => { });
+    }
+}, { once: false });
 
 function gameLoop() {
     if (isGameOver) return;
