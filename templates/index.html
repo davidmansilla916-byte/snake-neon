@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Snake | Retro Future Game</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="game-container">
+        <header>
+            <h1 class="neon-text">NEON SNAKE</h1>
+            <div class="score-board">
+                <div class="score-item">Puntaje: <span id="score">0</span></div>
+                <div class="score-item">Mejor: <span id="high-score">0</span></div>
+            </div>
+        </header>
+
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            <div id="start-screen" class="overlay">
+                <h2>PRESIONA CUALQUIER TECLA</h2>
+                <p class="blink">PARA COMENZAR</p>
+            </div>
+            <div id="game-over-screen" class="overlay hidden">
+                <h2 class="game-over-text">GAME OVER</h2>
+                <div class="final-score-box">
+                    <p>Puntaje Final</p>
+                    <span id="final-score">0</span>
+                </div>
+                <button id="restart-btn" class="neon-button">JUGAR DE NUEVO</button>
+            </div>
+        </div>
+
+        <div class="controls-hint">
+            <div class="key">▲</div>
+            <div class="key-row">
+                <div class="key">◄</div>
+                <div class="key">▼</div>
+                <div class="key">►</div>
+            </div>
+            <p>Usa las flechas para moverte</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
