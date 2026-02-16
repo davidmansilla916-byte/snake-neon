@@ -105,12 +105,22 @@ if (muteBtn) {
     });
 }
 
-// Intentar "desbloquear" el audio en el primer clic del usuario en la página
-document.addEventListener('click', () => {
-    if (!isMuted && bgMusic && bgMusic.paused && isGameRunning) {
-        bgMusic.play().catch(() => { });
+// Intentar "desbloquear" el audio en la primera interacción del usuario
+function unlockAudio() {
+    if (bgMusic && bgMusic.paused && !isMuted) {
+        bgMusic.play().then(() => {
+            // Si tiene éxito, removemos los escuchadores para no repetir
+            document.removeEventListener('click', unlockAudio);
+            document.removeEventListener('keydown', unlockAudio);
+            console.log("Música desbloqueada correctamente");
+        }).catch(e => {
+            console.log("Esperando interacción real para audio...");
+        });
     }
-}, { once: false });
+}
+
+document.addEventListener('click', unlockAudio);
+document.addEventListener('keydown', unlockAudio);
 
 function gameLoop() {
     if (isGameOver) return;
