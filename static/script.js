@@ -256,14 +256,28 @@ function drawRect(x, y, color, glow) {
 
 // Input Handling
 document.addEventListener('keydown', (e) => {
-    // Start game on any key if not running
-    if (!isGameRunning && !isGameOver && !['F5', 'F12'].includes(e.key)) {
-        // Prevent default only for arrow keys / space / WASD to avoid blocking browser shortcuts
+    // Si el modal de nombre está abierto, no procesar estas teclas para el juego
+    if (!nameModal.classList.contains('hidden')) return;
+
+    // Reiniciar o Empezar juego
+    if (!isGameRunning && !['F5', 'F12'].includes(e.key)) {
+        // Si estamos en Game Over, cualquier tecla reinicia (si el modal está cerrado)
+        if (isGameOver) {
+            initGame();
+        }
+
+        // Prevenir scroll
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
             e.preventDefault();
         }
+
         startGame();
-        // Allow the first move to register immediately if it's a direction
+        return;
+    }
+
+    // Prevenir scroll durante el juego
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
+        e.preventDefault();
     }
 
     // Direction handling
