@@ -53,7 +53,9 @@ let highScore = localStorage.getItem('snakeHighScore') || 0;
 
 highScoreElement.textContent = highScore;
 
-// Initialize Game
+// Initial Render
+updateLeaderboard();
+render();
 function initGame() {
     // Cancelar cualquier aparición pendiente del modal
     if (nameModalTimeout) clearTimeout(nameModalTimeout);
