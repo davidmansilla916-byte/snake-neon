@@ -45,12 +45,17 @@ let snake = [];
 let food = { x: 10, y: 10 };
 let velocity = { x: 0, y: 0 };
 let score = 0;
+let scoreToSave = 0; // Almacenar el puntaje real al morir
+let nameModalTimeout; // Para poder cancelar el temporizador
 let highScore = localStorage.getItem('snakeHighScore') || 0;
 
 highScoreElement.textContent = highScore;
 
 // Initialize Game
 function initGame() {
+    // Cancelar cualquier aparición pendiente del modal
+    if (nameModalTimeout) clearTimeout(nameModalTimeout);
+
     snake = [{ x: 10, y: 10 }];
     food = generateFood();
     velocity = { x: 0, y: 0 };
@@ -185,6 +190,8 @@ function gameOver() {
     isGameRunning = false;
     clearInterval(gameInterval);
 
+    scoreToSave = score; // Capturar el puntaje justo ahora
+
     if (score > highScore) {
         highScore = score;
         localStorage.setItem('snakeHighScore', highScore);
@@ -195,11 +202,11 @@ function gameOver() {
     if (gameOverScreen) gameOverScreen.classList.remove('hidden');
 
     // Show name modal if score > 0
-    if (score > 0 && nameModal) {
-        setTimeout(() => {
+    if (scoreToSave > 0 && nameModal) {
+        nameModalTimeout = setTimeout(() => {
             nameModal.classList.remove('hidden');
             if (playerNameInput) playerNameInput.focus();
-        }, 1000); // Wait a bit before showing modal
+        }, 800);
     }
 }
 
@@ -232,7 +239,7 @@ async function submitScore() {
         const response = await fetch('/api/scores', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, score })
+            body: JSON.stringify({ name, score: scoreToSave }) // Usar la puntuación capturada
         });
 
         if (response.ok) {
