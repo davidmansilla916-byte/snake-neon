@@ -351,6 +351,24 @@ canvas {
     text-align: center;
 }
 
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.neon-button.secondary {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+}
+
+.neon-button.secondary:hover {
+    background: var(--secondary-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 30px var(--secondary-color);
+}
+
 /* Animations */
 @keyframes blinker {
     50% {

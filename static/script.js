@@ -13,6 +13,7 @@ const leaderboardList = document.getElementById('leaderboard-list');
 const nameModal = document.getElementById('name-modal');
 const playerNameInput = document.getElementById('player-name-input');
 const submitScoreBtn = document.getElementById('submit-score-btn');
+const cancelScoreBtn = document.getElementById('cancel-score-btn');
 
 // Verificar que los elementos existan antes de usarlos
 const elementsExist = restartBtn && startScreen && gameOverScreen;
@@ -249,6 +250,11 @@ async function submitScore() {
 
 if (submitScoreBtn) {
     submitScoreBtn.addEventListener('click', submitScore);
+}
+if (cancelScoreBtn) {
+    cancelScoreBtn.addEventListener('click', () => {
+        if (nameModal) nameModal.classList.add('hidden');
+    });
 }
 if (playerNameInput) {
     playerNameInput.addEventListener('keypress', (e) => {
